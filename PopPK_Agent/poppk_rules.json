@@ -1,0 +1,459 @@
+{
+  "rule_library": {
+    "metadata": {
+      "version": "1.0.0",
+      "last_updated": "2026-01-12",
+      "focus": "Monoclonal Antibody (mAb) Early Clinical Development",
+      "author": "Gehang Ju"
+    },
+    "namespaces": {
+      "@Regulatory": [
+        {
+          "rule_id": "REG-FDA-001",
+          "category": "Data Used for Population PK Analysis",
+          "subcategory": "Study Subjects and Covariates",
+          "rule_description": "The population PK analysis should include data from the target patient population, and may also include data from other populations such as healthy volunteers. Key demographic, pathophysiologic, and concomitant medication information should be collected as potential covariates.",
+          "source": "FDA Population Pharmacokinetics Guidance for Industry, 2022",
+          "source_section": "IV.A. Study Subjects and Covariates",
+          "keywords": ["target population", "covariates", "demographics", "pathophysiology"]
+        },
+        {
+          "rule_id": "REG-FDA-002",
+          "category": "Data Used for Population PK Analysis",
+          "subcategory": "PK Sampling Schedule",
+          "rule_description": "PK sampling schedules should be designed to adequately characterize the concentration-time profile, including absorption, distribution, and elimination phases. Both rich and sparse sampling designs can be informative.",
+          "source": "FDA Population Pharmacokinetics Guidance for Industry, 2022",
+          "source_section": "IV.B. PK Sampling Schedule",
+          "keywords": ["sampling schedule", "rich sampling", "sparse sampling", "concentration-time profile"]
+        },
+        {
+          "rule_id": "REG-FDA-003",
+          "category": "Data Analysis",
+          "subcategory": "Preliminary Examination of the Data",
+          "rule_description": "Before model development, perform a preliminary examination of the data, including graphical exploration of concentration-time data, and relationships between PK parameters and covariates.",
+          "source": "FDA Population Pharmacokinetics Guidance for Industry, 2022",
+          "source_section": "V.A. Preliminary Examination of the Data",
+          "keywords": ["preliminary analysis", "graphical exploration", "data examination"]
+        },
+        {
+          "rule_id": "REG-FDA-004",
+          "category": "Data Analysis",
+          "subcategory": "Model Development",
+          "rule_description": "Model development is an iterative process that includes developing the structural model, the statistical model for inter-individual and residual variability, and identifying significant covariates.",
+          "source": "FDA Population Pharmacokinetics Guidance for Industry, 2022",
+          "source_section": "V.B. Model Development",
+          "keywords": ["model development", "structural model", "statistical model", "iterative process"]
+        },
+        {
+          "rule_id": "REG-FDA-005",
+          "category": "Data Analysis",
+          "subcategory": "Model Validation",
+          "rule_description": "Model validation is essential to ensure the model is adequate for its intended purpose. This should include goodness-of-fit (GOF) plots, and may include techniques like bootstrap analysis and visual predictive checks (VPC).",
+          "source": "FDA Population Pharmacokinetics Guidance for Industry, 2022",
+          "source_section": "V.C. Model Validation",
+          "keywords": ["model validation", "goodness-of-fit", "bootstrap", "VPC"]
+        },
+        {
+          "rule_id": "REG-FDA-006",
+          "category": "Population PK Study Reporting",
+          "subcategory": "Format and Content",
+          "rule_description": "The population PK study report should be comprehensive and include an executive summary, introduction, materials and methods (including data, software, and models), results, discussion, and conclusions. All electronic files (datasets, model code, report) should be submitted.",
+          "source": "FDA Population Pharmacokinetics Guidance for Industry, 2022",
+          "source_section": "VII.A. Format and Content of the Population PK Study Report",
+          "keywords": ["reporting", "study report", "electronic submission", "traceability"]
+        }
+      ],
+      "@BioPhys": [
+        {
+          "rule_id": "BIO-MAB-001",
+          "category": "Pharmacokinetic Properties",
+          "subcategory": "Nonspecific Clearance",
+          "rule_description": "The nonspecific clearance of therapeutic mAbs is target-independent and mediated by pinocytosis. The typical clearance for marketed mAbs ranges from 90 to 560 mL/day, with half-lives of 11-30 days, similar to endogenous IgG.",
+          "source": "Tutorial on Monoclonal Antibody Pharmacokinetics and Its Considerations in Early Development, Ovacik & Lin, 2018",
+          "source_section": "Nonspecific clearance",
+          "keywords": ["nonspecific clearance", "pinocytosis", "mAb", "half-life"]
+        },
+        {
+          "rule_id": "BIO-MAB-002",
+          "category": "Pharmacokinetic Properties",
+          "subcategory": "FcRn-Mediated Recycling",
+          "rule_description": "The long half-life of IgG antibodies is due to the neonatal Fc receptor (FcRn) recycling mechanism. FcRn binds to the IgG Fc region in a pH-dependent manner, rescuing it from lysosomal degradation and returning it to circulation.",
+          "source": "Tutorial on Monoclonal Antibody Pharmacokinetics and Its Considerations in Early Development, Ovacik & Lin, 2018",
+          "source_section": "FcRn-Mediated Recycling",
+          "keywords": ["FcRn", "recycling", "pH-dependent", "long half-life"]
+        },
+        {
+          "rule_id": "BIO-MAB-003",
+          "category": "Pharmacokinetic Properties",
+          "subcategory": "Target-Mediated Drug Disposition (TMDD)",
+          "rule_description": "TMDD occurs when the drug-target interaction significantly contributes to the mAb's clearance. It is characterized by nonlinear, dose-dependent clearance at non-saturating doses.",
+          "source": "Tutorial on Monoclonal Antibody Pharmacokinetics and Its Considerations in Early Development, Ovacik & Lin, 2018",
+          "source_section": "Target-mediated drug disposition (TMDD)",
+          "keywords": ["TMDD", "nonlinear PK", "dose-dependent clearance", "target binding"]
+        },
+        {
+          "rule_id": "BIO-MAB-004",
+          "category": "Pharmacokinetic Properties",
+          "subcategory": "IgG Subtypes",
+          "rule_description": "Different IgG isotypes (IgG1, IgG2, IgG4) have different effector functions (ADCC, CDC) but generally share similar long half-lives of around 21 days due to FcRn binding.",
+          "source": "Tutorial on Monoclonal Antibody Pharmacokinetics and Its Considerations in Early Development, Ovacik & Lin, 2018",
+          "source_section": "IgG Subtypes",
+          "keywords": ["IgG1", "IgG2", "IgG4", "effector function", "isotype"]
+        }
+      ],
+      "@ModelingTechniques": [
+        {
+          "rule_id": "MT-NONMEM-001",
+          "category": "Control Stream Structure",
+          "subcategory": "General Syntax",
+          "rule_description": "Each record in a NONMEM control stream must begin with a '$' sign. Comments are denoted by a semicolon ';', and NONMEM versions 7.2 and later are case-sensitive.",
+          "source": "NONMEM Tutorial Part I, Bauer, 2019",
+          "source_section": "Basic Structure and Execution of NONMEM",
+          "keywords": ["control stream", "syntax", "$", "comment"]
+        },
+        {
+          "rule_id": "MT-NONMEM-002",
+          "category": "Core Records",
+          "subcategory": "$PROBLEM",
+          "rule_description": "The $PROBLEM record is used to provide a brief description of the model and analysis being performed.",
+          "source": "NONMEM Tutorial Part I, Bauer, 2019",
+          "source_section": "Defining a Model Through the Control Stream",
+          "keywords": ["$PROBLEM", "model description"]
+        },
+        {
+          "rule_id": "MT-NONMEM-003",
+          "category": "Core Records",
+          "subcategory": "$INPUT",
+          "rule_description": "The $INPUT record specifies the order of data items in the dataset. Standard names like ID, TIME, DV, AMT, RATE, EVID, MDV, CMT should be used.",
+          "source": "NONMEM Tutorial Part I, Bauer, 2019",
+          "source_section": "Creating a Data File",
+          "keywords": ["$INPUT", "data items", "ID", "TIME", "DV"]
+        },
+        {
+          "rule_id": "MT-NONMEM-004",
+          "category": "Core Records",
+          "subcategory": "$DATA",
+          "rule_description": "The $DATA record specifies the name and location of the dataset file. Options like IGNORE and ACCEPT can be used to filter records.",
+          "source": "NONMEM Tutorial Part I, Bauer, 2019",
+          "source_section": "Creating a Data File",
+          "keywords": ["$DATA", "dataset", "IGNORE", "ACCEPT"]
+        },
+        {
+          "rule_id": "MT-NONMEM-005",
+          "category": "Model Specification",
+          "subcategory": "$SUBROUTINE",
+          "rule_description": "The $SUBROUTINE record is used to select the appropriate ADVAN (structural model) and TRANS (parameterization) subroutines from the PREDPP library.",
+          "source": "NONMEM Tutorial Part I, Bauer, 2019",
+          "source_section": "Basic Structure and Execution of NONMEM",
+          "keywords": ["$SUBROUTINE", "ADVAN", "TRANS", "PREDPP"]
+        },
+        {
+          "rule_id": "MT-NONMEM-006",
+          "category": "Model Specification",
+          "subcategory": "$PK Block",
+          "rule_description": "The $PK block is used to define the pharmacokinetic parameters (e.g., CL, V, KA) and their relationship with covariates.",
+          "source": "NONMEM Tutorial Part I, Bauer, 2019",
+          "source_section": "Defining a Model Through the Control Stream",
+          "keywords": ["$PK", "parameters", "CL", "V", "covariates"]
+        },
+        {
+          "rule_id": "MT-NONMEM-007",
+          "category": "Model Specification",
+          "subcategory": "$ERROR Block",
+          "rule_description": "The $ERROR block defines the residual error model, describing the difference between observed and predicted concentrations. Common models include proportional, additive, and combined error models.",
+          "source": "NONMEM Tutorial Part I, Bauer, 2019",
+          "source_section": "Defining a Model Through the Control Stream",
+          "keywords": ["$ERROR", "residual error", "proportional error", "additive error"]
+        },
+        {
+          "rule_id": "MT-NONMEM-008",
+          "category": "Parameter Estimation",
+          "subcategory": "$THETA",
+          "rule_description": "The $THETA record specifies the initial estimates and boundaries for the fixed-effect parameters (thetas). A common format is (Lower Bound, Initial Estimate, Upper Bound).",
+          "source": "NONMEM Tutorial Part I, Bauer, 2019",
+          "source_section": "Defining a Model Through the Control Stream",
+          "keywords": ["$THETA", "initial estimates", "fixed effects", "boundaries"]
+        },
+        {
+          "rule_id": "MT-NONMEM-009",
+          "category": "Parameter Estimation",
+          "subcategory": "$OMEGA",
+          "rule_description": "The $OMEGA record specifies the initial estimates for the variance of the inter-individual random effects (etas). It is often defined as a diagonal matrix for uncorrelated effects.",
+          "source": "NONMEM Tutorial Part I, Bauer, 2019",
+          "source_section": "Defining a Model Through the Control Stream",
+          "keywords": ["$OMEGA", "IIV", "random effects", "variance"]
+        },
+        {
+          "rule_id": "MT-NONMEM-010",
+          "category": "Parameter Estimation",
+          "subcategory": "$SIGMA",
+          "rule_description": "The $SIGMA record specifies the initial estimates for the variance of the residual error terms (epsilons).",
+          "source": "NONMEM Tutorial Part I, Bauer, 2019",
+          "source_section": "Defining a Model Through the Control Stream",
+          "keywords": ["$SIGMA", "residual variance", "epsilon"]
+        },
+        {
+          "rule_id": "MT-NONMEM-011",
+          "category": "Execution and Output",
+          "subcategory": "$ESTIMATION",
+          "rule_description": "The $ESTIMATION record specifies the estimation method (e.g., METHOD=FOCE-I) and options like MAXEVAL (maximum evaluations). FOCE-I is generally recommended for PK models.",
+          "source": "NONMEM Tutorial Part II, Bauer, 2019",
+          "source_section": "Estimation Methods",
+          "keywords": ["$ESTIMATION", "FOCE-I", "SAEM", "estimation method"]
+        },
+        {
+          "rule_id": "MT-NONMEM-012",
+          "category": "Execution and Output",
+          "subcategory": "$TABLE",
+          "rule_description": "The $TABLE record specifies which variables to include in the output table file for diagnostics and reporting. Key variables include PRED, RES, WRES, CWRES, and individual parameters.",
+          "source": "NONMEM Tutorial Part I, Bauer, 2019",
+          "source_section": "Defining a Model Through the Control Stream",
+          "keywords": ["$TABLE", "output", "diagnostics", "CWRES"]
+        }
+      ],
+      "@DataStandards": [
+        {
+          "rule_id": "DS-CDISC-001",
+          "category": "SDTM",
+          "subcategory": "PC Domain (Pharmacokinetic Concentrations)",
+          "rule_description": "The PC domain is used to store pharmacokinetic concentration data. Key variables include USUBJID, PCTEST, PCORRES, PCSTRESC, PCSTRESN, PCDTC, and VISIT.",
+          "source": "CDISC SDTMIG v3.3",
+          "source_section": "Pharmacokinetic Concentrations (PC)",
+          "keywords": ["SDTM", "PC domain", "concentration data", "PCTEST"]
+        },
+        {
+          "rule_id": "DS-CDISC-002",
+          "category": "SDTM",
+          "subcategory": "PP Domain (Pharmacokinetic Parameters)",
+          "rule_description": "The PP domain is used to store pharmacokinetic parameters derived from concentration data. Key variables include USUBJID, PPTEST, PPORRES, PPSTRESC, PPSTRESN, and VISIT.",
+          "source": "CDISC SDTMIG v3.3",
+          "source_section": "Pharmacokinetic Parameters (PP)",
+          "keywords": ["SDTM", "PP domain", "PK parameters", "PPTEST"]
+        },
+        {
+          "rule_id": "DS-CDISC-003",
+          "category": "ADaM",
+          "subcategory": "ADPC (Analysis Dataset for PK Concentrations)",
+          "rule_description": "The ADPC dataset is an analysis-ready dataset for PK concentration data, typically structured as one record per concentration measurement per subject. It should include analysis-specific variables like AVAL, AVISIT, and time-related variables.",
+          "source": "Implementation of CDISC ADaM in the Pharmacokinetics Analysis, PHUSE 2014",
+          "source_section": "ADPC Dataset",
+          "keywords": ["ADaM", "ADPC", "analysis dataset", "AVAL"]
+        },
+        {
+          "rule_id": "DS-CDISC-004",
+          "category": "ADaM",
+          "subcategory": "ADPP (Analysis Dataset for PK Parameters)",
+          "rule_description": "The ADPP dataset is an analysis-ready dataset for PK parameters, structured as one record per parameter per subject. It is used for statistical analysis of PK parameters and should include variables like PARAM, PARAMCD, and AVAL.",
+          "source": "The Creation of ADaM Datasets for Pharmacokinetic (PK) Analysis, Quanticate",
+          "source_section": "ADPP Dataset",
+          "keywords": ["ADaM", "ADPP", "PK parameters", "PARAMCD", "AVAL"]
+        }
+      ],
+      "@ModelEvaluation": [
+        {
+          "rule_id": "ME-GOF-001",
+          "category": "Goodness-of-Fit (GOF)",
+          "subcategory": "Basic Diagnostic Plots",
+          "rule_description": "Basic goodness-of-fit plots should be generated and inspected, including Observed vs. Predicted concentrations, and residuals (e.g., CWRES) vs. time and predicted concentrations.",
+          "source": "FDA Population Pharmacokinetics Guidance for Industry, 2022",
+          "source_section": "V.C. Model Validation",
+          "keywords": ["goodness-of-fit", "GOF", "diagnostic plots", "CWRES"]
+        },
+        {
+          "rule_id": "ME-GOF-002",
+          "category": "Goodness-of-Fit (GOF)",
+          "subcategory": "Residuals",
+          "rule_description": "Conditional Weighted Residuals (CWRES) should be inspected for trends and bias. A general rule of thumb is that the majority of |CWRES| values should be less than 6.",
+          "source": "PopPK Rule Library Architecture Website",
+          "source_section": "@ModelEvaluation",
+          "keywords": ["CWRES", "residuals", "outliers", "bias"]
+        },
+        {
+          "rule_id": "ME-VALID-001",
+          "category": "Model Validation",
+          "subcategory": "Bootstrap",
+          "rule_description": "A bootstrap analysis should be performed to assess the stability and uncertainty of the parameter estimates. A high success rate (e.g., >90%) of bootstrap runs is expected.",
+          "source": "FDA Population Pharmacokinetics Guidance for Industry, 2022",
+          "source_section": "V.C. Model Validation",
+          "keywords": ["bootstrap", "model stability", "parameter uncertainty", "success rate"]
+        },
+        {
+          "rule_id": "ME-VALID-002",
+          "category": "Model Validation",
+          "subcategory": "Visual Predictive Check (VPC)",
+          "rule_description": "A Visual Predictive Check (VPC) should be performed to evaluate the predictive performance of the model. The observed data's median and prediction intervals should be well-overlaid by the simulated prediction intervals.",
+          "source": "FDA Population Pharmacokinetics Guidance for Industry, 2022",
+          "source_section": "V.C. Model Validation",
+          "keywords": ["VPC", "visual predictive check", "predictive performance", "simulation"]
+        },
+        {
+          "rule_id": "ME-COMP-001",
+          "category": "Model Comparison",
+          "subcategory": "Objective Function Value (OFV)",
+          "rule_description": "For nested models, a statistically significant decrease in the Objective Function Value (OFV) (e.g., a drop of 3.84 for one additional parameter, p<0.05) can be used to justify a more complex model.",
+          "source": "NONMEM Tutorial Part II, Bauer, 2019",
+          "source_section": "Model Selection",
+          "keywords": ["model comparison", "OFV", "likelihood ratio test", "nested models"]
+        },
+        {
+          "rule_id": "ME-GOF-003",
+          "category": "Goodness-of-Fit (GOF)",
+          "subcategory": "Residual Error Model Diagnosis",
+          "rule_description": "|IWRES| vs. IPRED should show a horizontal trend line. An upward or downward trend indicates misspecification of the residual error model (e.g., need for proportional vs. additive error).",
+          "source": "Guidelines on Pharmacometrics, 2020",
+          "keywords": ["|IWRES|", "IPRED", "heteroscedasticity", "error model"]
+        },
+        {
+          "rule_id": "ME-SHRINK-001",
+          "category": "Shrinkage",
+          "subcategory": "Eta-Shrinkage",
+          "rule_description": "Eta-shrinkage (IIV shrinkage) should be calculated and reported. High shrinkage (e.g., >30%) may indicate that the data are not informative for estimating the random effect, and covariate relationships for that parameter may be unreliable.",
+          "source": "Reporting guidelines for population pharmacokinetic analyses, Dykstra et al., 2015",
+          "source_section": "Model Evaluation",
+          "keywords": ["shrinkage", "eta-shrinkage", "IIV", "covariate effects"]
+        }
+      ],
+      "@CovariateAnalysis": [
+        {
+          "rule_id": "CA-METHOD-001",
+          "category": "Screening Methods",
+          "subcategory": "Stepwise Covariate Modeling (SCM)",
+          "rule_description": "A common approach for covariate screening is Stepwise Covariate Modeling (SCM), which involves a forward inclusion step (e.g., p < 0.05, OFV drop > 3.84) and a backward elimination step (e.g., p < 0.01, OFV drop > 6.63).",
+          "source": "FDA Population Pharmacokinetics Guidance for Industry, 2022",
+          "source_section": "V.B. Model Development",
+          "keywords": ["covariate analysis", "stepwise", "SCM", "forward inclusion", "backward elimination"]
+        },
+        {
+          "rule_id": "CA-RELATION-001",
+          "category": "Covariate Relationships",
+          "subcategory": "Continuous Covariates",
+          "rule_description": "Continuous covariates (e.g., weight, age) are often modeled using a power function, centered on a typical value from the study population (e.g., (WT/70)^THETA).",
+          "source": "Tutorial on Monoclonal Antibody Pharmacokinetics and Its Considerations in Early Development, Ovacik & Lin, 2018",
+          "source_section": "Covariate Analysis",
+          "keywords": ["continuous covariate", "power function", "centering", "body weight"]
+        },
+        {
+          "rule_id": "CA-RELATION-002",
+          "category": "Covariate Relationships",
+          "subcategory": "Categorical Covariates",
+          "rule_description": "Categorical covariates (e.g., sex, race) are typically modeled as a proportional shift on the parameter for one of the categories.",
+          "source": "Tutorial on Monoclonal Antibody Pharmacokinetics and Its Considerations in Early Development, Ovacik & Lin, 2018",
+          "source_section": "Covariate Analysis",
+          "keywords": ["categorical covariate", "proportional shift", "sex", "race"]
+        },
+        {
+          "rule_id": "CA-EVAL-001",
+          "category": "Evaluation",
+          "subcategory": "Clinical Relevance",
+          "rule_description": "A statistically significant covariate effect may not be clinically relevant. The magnitude of the effect should be assessed to determine if it warrants a dose adjustment. An effect of >20-30% on PK parameters is often considered clinically relevant.",
+          "source": "Reporting guidelines for population pharmacokinetic analyses, Dykstra et al., 2015",
+          "source_section": "Discussion",
+          "keywords": ["clinical relevance", "effect size", "dose adjustment"]
+        }
+      ],
+      "@mAb_EarlyClinical": [
+        {
+          "rule_id": "MAB-EC-001",
+          "category": "First-in-Human (FIH) Studies",
+          "subcategory": "Starting Dose Selection",
+          "rule_description": "The starting dose for FIH studies should be selected based on preclinical PK/PD data and safety margins. For mAbs, a MABEL (Minimal Anticipated Biological Effect Level) approach is often used.",
+          "source": "Tutorial on Monoclonal Antibody Pharmacokinetics and Its Considerations in Early Development, Ovacik & Lin, 2018",
+          "source_section": "Early Clinical Study Design",
+          "keywords": ["FIH", "starting dose", "MABEL", "preclinical translation"]
+        },
+        {
+          "rule_id": "MAB-EC-002",
+          "category": "First-in-Human (FIH) Studies",
+          "subcategory": "PK Sampling",
+          "rule_description": "Intensive PK sampling should be implemented for the initial dose cohorts in FIH studies to characterize the full PK profile, especially to detect potential nonlinear PK (TMDD).",
+          "source": "Tutorial on Monoclonal Antibody Pharmacokinetics and Its Considerations in Early Development, Ovacik & Lin, 2018",
+          "source_section": "Early Clinical Study Design",
+          "keywords": ["FIH", "PK sampling", "intensive sampling", "TMDD detection"]
+        },
+        {
+          "rule_id": "MAB-EC-003",
+          "category": "TMDD Characterization",
+          "subcategory": "Identification",
+          "rule_description": "TMDD should be suspected if dose-normalized exposure (AUC) decreases with decreasing dose, or if clearance is higher at lower doses. This indicates target saturation is occurring.",
+          "source": "Tutorial on Monoclonal Antibody Pharmacokinetics and Its Considerations in Early Development, Ovacik & Lin, 2018",
+          "source_section": "Target-mediated drug disposition (TMDD)",
+          "keywords": ["TMDD", "nonlinear PK", "dose-dependent clearance", "target saturation"]
+        },
+        {
+          "rule_id": "MAB-EC-004",
+          "category": "TMDD Characterization",
+          "subcategory": "Modeling Approach",
+          "rule_description": "When TMDD is present, a mechanistic TMDD model (e.g., full TMDD, quasi-steady-state (QSS), or Michaelis-Menten approximation) should be used to describe the PK, rather than a simple linear model.",
+          "source": "Target-mediated Drug Disposition Model for Drugs That Bind More Than One Target, Gibiansky et al., 2010",
+          "source_section": "TMDD Models",
+          "keywords": ["TMDD model", "QSS approximation", "Michaelis-Menten", "mechanistic model"]
+        },
+        {
+          "rule_id": "MAB-EC-005",
+          "category": "Immunogenicity",
+          "subcategory": "Impact on PK",
+          "rule_description": "The impact of anti-drug antibodies (ADA) on PK should be evaluated. ADA can increase mAb clearance and reduce exposure. This can be modeled as a time-varying covariate or by analyzing PK in ADA-positive vs. ADA-negative subjects.",
+          "source": "Tutorial on Monoclonal Antibody Pharmacokinetics and Its Considerations in Early Development, Ovacik & Lin, 2018",
+          "source_section": "Immunogenicity Impact on PK",
+          "keywords": ["immunogenicity", "ADA", "anti-drug antibody", "time-varying clearance"]
+        },
+        {
+          "rule_id": "MAB-EC-006",
+          "category": "Dose Selection",
+          "subcategory": "Exposure-Response Analysis",
+          "rule_description": "An exposure-response (E-R) analysis should be conducted to establish the relationship between drug exposure and efficacy/safety, which informs the selection of an optimal dose and regimen.",
+          "source": "FDA Population Pharmacokinetics Guidance for Industry, 2022",
+          "source_section": "III.B. Application of Population PK Analysis to Inform Drug Use in Labeling",
+          "keywords": ["exposure-response", "E-R analysis", "dose selection", "therapeutic window"]
+        }
+      ],
+      "@Reporting": [
+        {
+          "rule_id": "REP-FDA-001",
+          "category": "FDA Reporting Requirements",
+          "subcategory": "Comprehensive Report",
+          "rule_description": "The population PK study report submitted to the FDA should be comprehensive, including sections for executive summary, introduction, methods (data, software, models), results, discussion, and conclusions.",
+          "source": "FDA Population Pharmacokinetics Guidance for Industry, 2022",
+          "source_section": "VII.A. Format and Content of the Population PK Study Report",
+          "keywords": ["reporting", "FDA", "study report", "comprehensive"]
+        },
+        {
+          "rule_id": "REP-FDA-002",
+          "category": "FDA Reporting Requirements",
+          "subcategory": "Electronic Submission",
+          "rule_description": "All electronic files, including datasets (in a transport format like .xpt), model code (control streams), output files, and the report, must be submitted to the agency to ensure full traceability and reproducibility.",
+          "source": "FDA Population Pharmacokinetics Guidance for Industry, 2022",
+          "source_section": "VII.B. Submitting Electronic Files to the Agency",
+          "keywords": ["electronic submission", "traceability", "reproducibility", "datasets", "model code"]
+        },
+        {
+          "rule_id": "REP-GEN-001",
+          "category": "General Reporting Guidelines",
+          "subcategory": "Abstract/Summary",
+          "rule_description": "The report abstract or summary should clearly state the objectives, methods, key results (including final model parameters and significant covariates), and conclusions of the analysis.",
+          "source": "Reporting guidelines for population pharmacokinetic analyses, Dykstra et al., 2015",
+          "source_section": "Abstract",
+          "keywords": ["reporting", "abstract", "summary", "objectives", "results"]
+        },
+        {
+          "rule_id": "REP-GEN-002",
+          "category": "General Reporting Guidelines",
+          "subcategory": "Methods Section",
+          "rule_description": "The methods section should be detailed enough to allow an independent modeler to reproduce the analysis. This includes a clear description of the software, model development process, covariate analysis, and validation methods.",
+          "source": "Reporting guidelines for population pharmacokinetic analyses, Dykstra et al., 2015",
+          "source_section": "Methods",
+          "keywords": ["methods", "reproducibility", "model development", "validation"]
+        },
+        {
+          "rule_id": "REP-GEN-003",
+          "category": "General Reporting Guidelines",
+          "subcategory": "Results Section",
+          "rule_description": "The results section should present parameter estimates with their uncertainty (e.g., RSE% or 95% CI from bootstrap), goodness-of-fit plots, and validation results (e.g., VPC, bootstrap results).",
+          "source": "Reporting guidelines for population pharmacokinetic analyses, Dykstra et al., 2015",
+          "source_section": "Results",
+          "keywords": ["results", "parameter estimates", "uncertainty", "GOF", "VPC"]
+        }
+      ]
+    }
+  }
+}

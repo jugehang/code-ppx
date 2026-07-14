@@ -1,0 +1,134 @@
+{
+  "name": "poppk-agent",
+  "displayName": "PopPK Agent",
+  "description": "自动化群体药动学建模平台 - 基于LLM和PopPK规则库",
+  "version": "0.1.0",
+  "publisher": "poppk",
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "categories": ["Other", "Machine Learning", "Data Science"],
+  "activationEvents": [
+    "onCommand:poppk.startAutomation",
+    "onCommand:poppk.runModel",
+    "onCommand:poppk.auditGOF",
+    "onCommand:poppk.auditVPC",
+    "onView:poppkExplorer"
+  ],
+  "main": "./extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "poppk.startAutomation",
+        "title": "PopPK: 启动自动化建模",
+        "category": "PopPK Agent"
+      },
+      {
+        "command": "poppk.runModel",
+        "title": "PopPK: 运行单个模型",
+        "category": "PopPK Agent"
+      },
+      {
+        "command": "poppk.auditGOF",
+        "title": "PopPK: GOF图AI审计",
+        "category": "PopPK Agent"
+      },
+      {
+        "command": "poppk.auditVPC",
+        "title": "PopPK: VPC图AI审计",
+        "category": "PopPK Agent"
+      },
+      {
+        "command": "poppk.viewRules",
+        "title": "PopPK: 查看规则库",
+        "category": "PopPK Agent"
+      },
+      {
+        "command": "poppk.configureLLM",
+        "title": "PopPK: 配置LLM后端",
+        "category": "PopPK Agent"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "poppk-sidebar",
+          "title": "PopPK Agent",
+          "icon": "media/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "poppk-sidebar": [
+        {
+          "id": "poppkExplorer",
+          "name": "模型管理器",
+          "when": "poppk.activated"
+        },
+        {
+          "id": "poppkDiagnostics",
+          "name": "诊断面板",
+          "when": "poppk.activated"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "PopPK Agent",
+      "properties": {
+        "poppk.llmBackend": {
+          "type": "string",
+          "enum": ["lmstudio", "ollama", "openai", "claude", "claude_code", "codex"],
+          "default": "lmstudio",
+          "description": "LLM后端类型"
+        },
+        "poppk.llmBaseUrl": {
+          "type": "string",
+          "default": "http://localhost:1234/v1",
+          "description": "LLM API基础URL"
+        },
+        "poppk.llmModelId": {
+          "type": "string",
+          "default": "google/gemma-4-26b-a4b",
+          "description": "LLM模型ID"
+        },
+        "poppk.nonmemPath": {
+          "type": "string",
+          "default": "/usr/local/bin/nm74",
+          "description": "NONMEM可执行文件路径"
+        },
+        "poppk.maxIterations": {
+          "type": "number",
+          "default": 20,
+          "description": "自动化建模最大迭代次数"
+        },
+        "poppk.runVpcEveryIteration": {
+          "type": "boolean",
+          "default": false,
+          "description": "是否每次迭代都运行VPC (耗时)"
+        }
+      }
+    },
+    "menus": {
+      "view/title": [
+        {
+          "command": "poppk.startAutomation",
+          "when": "view == poppkExplorer",
+          "group": "navigation"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run package",
+    "compile": "webpack --mode development",
+    "watch": "webpack --mode development --watch",
+    "package": "webpack --mode production --devtool hidden-source-map"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.80.0",
+    "@types/node": "^18.0.0",
+    "webpack": "^5.88.0",
+    "webpack-cli": "^5.1.0",
+    "typescript": "^5.1.0"
+  }
+}

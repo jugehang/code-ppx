@@ -1,0 +1,23 @@
+{
+  "project_name": "TEST_mAb_PopPK",
+  "units": {
+    "time": "Time (h)",
+    "conc": "Concentration (ng/mL)"
+  },
+  "grouping": {
+    "factor": "STUDY",
+    "labels": {
+      "1": "0.3 mg/kg", "2": "1.0 mg/kg", "3": "3.0 mg/kg",
+      "4": "6.0 mg/kg", "5": "10.0 mg/kg", "6": "15.0 mg/kg"
+    }
+  },
+  "psn_settings": {
+    "vpc_samples": 500,
+    "bootstrap_samples": 200,
+    "stratify_var": "STUDY",
+    "vpc_binning": {
+      "method": "endpoints",
+      "points": "1, 1.5, 4, 12, 24, 60, 132, 252, 420, 588, 840, 1176, 1400, 1600, 1850, 2200, 2520"
+    }
+  }
+}

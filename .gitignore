@@ -1,0 +1,61 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+.venv/
+*.egg-info/
+dist/
+build/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+node_modules/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# NONMEM large output files (keep .mod, .lst, .ext for reproducibility)
+*.cov
+*.cor
+*.shk
+*.phi
+*.rec
+*.smt
+*.rmt
+*.cnv
+
+# PsN output directories (large)
+vpc_dir_*/
+boot_dir_*/
+
+# R environment
+.Rhistory
+.RData
+.Rproj.user/
+
+# Temporary and log files
+*.log
+tmp/
+temp/
+
+# Large image files (keep in Compare* directories selectively)
+# Uncomment to ignore large diagnostic images:
+# *.jpg
+# *.JPG
+# *.pdf
+# *.xlsx
+
+# API keys and secrets
+.env
+secrets.json
+api_keys.json
