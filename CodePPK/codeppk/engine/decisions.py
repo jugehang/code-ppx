@@ -22,6 +22,7 @@ class ActionType(str, Enum):
     ESCALATE_STRUCTURE = "escalate"  # Move to more complex model (1->2->3 cmt)
     SIMPLIFY_STRUCTURE = "simplify"  # Move to simpler model
     CHANGE_ERROR_MODEL = "change_error"  # Modify residual error structure
+    SWITCH_TO_NONLINEAR = "switch_nonlinear"  # Switch to MM or TMDD model
     RERUN = "rerun"  # Re-run with adjusted initial estimates
     RUN_VPC = "run_vpc"  # Generate VPC (if GOF looks OK)
     RUN_BOOTSTRAP = "run_bootstrap"  # Run bootstrap validation
@@ -137,9 +138,13 @@ Based on the current model status, decide the next action:
 7. **CHANGE_ERROR_MODEL**: If |IWRES| vs IPRED shows heteroscedasticity.
    - Specify the new error model type.
 
-8. **RUN_VPC**: If GOF looks acceptable but VPC hasn't been run yet.
+8. **SWITCH_TO_NONLINEAR**: If GOF/VPC shows dose-dependent clearance or nonlinear PK.
+   - Specify the target template: `iv_mm_advan10_trans1` (Michaelis-Menten) or `iv_tmdd_advan13` (full TMDD).
+   - Use MM first as a simpler approximation; escalate to TMDD if MM is insufficient.
 
-9. **RUN_BOOTSTRAP**: If GOF and VPC are acceptable, run bootstrap for final validation.
+9. **RUN_VPC**: If GOF looks acceptable but VPC hasn't been run yet.
+
+10. **RUN_BOOTSTRAP**: If GOF and VPC are acceptable, run bootstrap for final validation.
 
 ### Output Format
 Respond with ONLY a JSON object (no markdown fences):

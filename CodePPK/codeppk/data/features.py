@@ -39,10 +39,18 @@ class DataFeatures:
     grouping_factors: List[str] = field(default_factory=list)
     # mAb-specific
     drug_type_hint: str = "mAb"  # default assumption for this platform
+    # Nonlinear PK detection
+    has_nonlinear_pk: bool = False  # TMDD or Michaelis-Menten suspected
+    dose_range: tuple = (0.0, 0.0)  # (min_dose, max_dose)
 
     @property
     def recommended_template(self) -> str:
-        """Recommend the initial NONMEM template ID based on features."""
+        """Recommend the initial NONMEM template ID based on features.
+
+        Always starts with the simplest linear model. Nonlinear PK (TMDD)
+        is flagged separately — the AI engine can escalate to MM/TMDD
+        if GOF diagnostics show nonlinear patterns.
+        """
         if self.route == "iv_infusion":
             return "iv_infusion_1c_advan1_trans2"
         if self.route == "iv_bolus":
@@ -122,6 +130,7 @@ def analyze_dataset(csv_path: Path) -> DataFeatures:
         rate_idx = columns.index("RATE") if "RATE" in columns else -1
         dur_idx = columns.index("DUR") if "DUR" in columns else -1
         id_idx = columns.index("ID") if "ID" in columns else -1
+        dose_idx = columns.index("DOSE") if "DOSE" in columns else -1
 
         subject_ids = set()
         has_dosing = False
@@ -129,6 +138,9 @@ def analyze_dataset(csv_path: Path) -> DataFeatures:
         has_rate_value = False
         has_dur_value = False
         cmt_values = set()
+        dose_values = set()
+        min_dose = float('inf')
+        max_dose = 0.0
 
         for row in reader:
             features.n_records += 1
@@ -156,6 +168,17 @@ def analyze_dataset(csv_path: Path) -> DataFeatures:
             if amt_idx >= 0 and amt_idx < len(row):
                 try:
                     amt_val = float(row[amt_idx])
+                except (ValueError, IndexError):
+                    pass
+
+            # Collect dose values for nonlinear PK detection
+            if dose_idx >= 0 and dose_idx < len(row):
+                try:
+                    dose_val = float(row[dose_idx])
+                    if dose_val > 0:
+                        dose_values.add(dose_val)
+                        min_dose = min(min_dose, dose_val)
+                        max_dose = max(max_dose, dose_val)
                 except (ValueError, IndexError):
                     pass
 
@@ -191,6 +214,18 @@ def analyze_dataset(csv_path: Path) -> DataFeatures:
         features.cmt_values = cmt_values
         features.has_rate = features.has_rate and has_rate_value
         features.has_dur = features.has_dur and has_dur_value
+
+        # Store dose range
+        if min_dose != float('inf'):
+            features.dose_range = (min_dose, max_dose)
+
+        # Detect potential nonlinear PK (TMDD)
+        # If there are multiple dose levels spanning a wide range (>10x), 
+        # and the drug type is mAb, suspect TMDD
+        if len(dose_values) >= 3 and max_dose > 0:
+            dose_ratio = max_dose / min_dose if min_dose > 0 else 0
+            if dose_ratio >= 10:
+                features.has_nonlinear_pk = True
 
         # Determine route
         features.route = _determine_route(
@@ -235,16 +270,20 @@ def _determine_route(has_dosing: bool, has_obs: bool, has_rate: bool,
 
 def features_to_prompt(features: DataFeatures) -> str:
     """Convert data features to a text summary for LLM prompts."""
+    nonlinear = "yes (TMDD suspected)" if features.has_nonlinear_pk else "no"
+    dose_range = f"{features.dose_range[0]}-{features.dose_range[1]}" if features.dose_range[0] > 0 else "N/A"
     return f"""### Dataset Feature Summary
 
 - **Route**: {features.recommended_route_label}
 - **Columns**: {", ".join(features.columns)}
 - **Records**: {features.n_records} total, {features.n_obs} observations, {features.n_subjects} subjects
 - **Dosing**: RATE={'yes' if features.has_rate else 'no'}, DUR={'yes' if features.has_dur else 'no'}
+- **Dose range**: {dose_range}
 - **CMT values**: {sorted(features.cmt_values) if features.cmt_values else 'none'}
 - **Continuous covariates**: {", ".join(features.continuous_covariates) or 'none'}
 - **Categorical covariates**: {", ".join(features.categorical_covariates) or 'none'}
 - **Grouping factors**: {", ".join(features.grouping_factors) or 'none'}
 - **BQL column**: {'yes' if features.has_bql else 'no'}
+- **Nonlinear PK**: {nonlinear}
 - **Recommended initial template**: {features.recommended_template}
 """

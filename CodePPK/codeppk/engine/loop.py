@@ -412,6 +412,25 @@ class ModelingLoop:
             ))
             self.log(f"Changing error model: {decision.details}")
 
+        elif decision.action == ActionType.SWITCH_TO_NONLINEAR:
+            # Switch to Michaelis-Menten or TMDD template
+            target_template = decision.new_template or "iv_mm_advan10_trans1"
+            # Generate entirely new model from template instead of modifying
+            from ..models.generator import generate_initial_model
+            try:
+                new_content = generate_initial_model(
+                    template_id=target_template,
+                    run_id=new_run_id,
+                    data_file=self.project.data_file,
+                )
+                target_mod.write_text(new_content, encoding="utf-8")
+                self.log(f"Switched to nonlinear model: {target_template}")
+                self._validate_and_fix(target_mod)
+                return int(new_run_id)
+            except Exception as exc:
+                self.log(f"Failed to switch to nonlinear model: {exc}")
+                return None
+
         elif decision.action == ActionType.RERUN:
             # Just create a copy with bumped run ID
             modifications.append(Modification(
