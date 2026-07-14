@@ -43,13 +43,24 @@ class LLMConfig:
 @dataclass
 class NonmemConfig:
     """NONMEM运行环境配置"""
-    nonmem_path: str = "/usr/local/bin/nm74"  # NONMEM可执行文件路径
+    nonmem_path: str = "/opt/nm760/util/nmfe76"  # NONMEM可执行文件路径
     psn_path: str = "/usr/local/bin/vpc"      # PsN vpc命令路径
+    psn_execute: str = "/usr/local/bin/execute"  # PsN execute命令路径
     rscript_path: str = "Rscript"              # Rscript路径
     sdk_path: str = "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk"
     max_eval: int = 9999
     estimation_method: str = "1"  # FOCE-I
     run_cov: bool = True
+
+    @classmethod
+    def from_env(cls):
+        """从环境变量加载"""
+        return cls(
+            nonmem_path=os.getenv("POPPK_NONMEM_PATH", "/opt/nm760/util/nmfe76"),
+            psn_path=os.getenv("POPPK_PSN_VPC", "/usr/local/bin/vpc"),
+            psn_execute=os.getenv("POPPK_PSN_EXECUTE", "/usr/local/bin/execute"),
+            rscript_path=os.getenv("POPPK_RSCRIPT_PATH", "Rscript"),
+        )
 
     def get_env(self):
         """获取NONMEM运行所需的环境变量"""
@@ -80,7 +91,7 @@ class ProjectConfig:
                 project_name=data.get("project_name", "TEST_mAb_PopPK"),
                 drug_type=data.get("drug_type", "Monoclonal Antibody (mAb)"),
                 units=data.get("units", {"time": "Time (h)", "conc": "Concentration (ng/mL)"}),
-                groupings=data.get("groupings", {}),
+                grouping=data.get("grouping", data.get("groupings", {})),
                 psn_settings=data.get("psn_settings", {}),
                 data_file=data.get("data_file", "NM_dat_new.csv"),
             )
@@ -93,7 +104,7 @@ class ProjectConfig:
 class PopPKConfig:
     """PopPK Agent 总配置"""
     llm: LLMConfig = field(default_factory=LLMConfig.from_env)
-    nonmem: NonmemConfig = field(default_factory=NonmemConfig)
+    nonmem: NonmemConfig = field(default_factory=NonmemConfig.from_env)
     project: ProjectConfig = field(default_factory=ProjectConfig)
 
     # 路径

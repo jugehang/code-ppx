@@ -43,7 +43,20 @@ class LLMBackend:
         if clean.endswith("```"):
             clean = clean[:-3]
         clean = clean.strip()
-        return json.loads(clean)
+        try:
+            return json.loads(clean)
+        except json.JSONDecodeError:
+            # 尝试提取第一个JSON对象
+            import re
+            match = re.search(r'\{[\s\S]*\}', clean)
+            if match:
+                try:
+                    return json.loads(match.group(0))
+                except json.JSONDecodeError:
+                    # 尝试修复常见的转义问题
+                    fixed = match.group(0).replace('\\(', '(').replace('\\)', ')')
+                    return json.loads(fixed)
+            raise
 
     def vision(self, prompt: str, image_paths: List[str], system: str = "") -> str:
         """视觉多模态对话"""

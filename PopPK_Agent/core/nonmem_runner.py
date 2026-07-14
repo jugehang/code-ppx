@@ -47,11 +47,31 @@ class NonmemRunner:
         # 准备环境
         env = self.config.nonmem.get_env()
 
-        # 构建NONMEM命令
-        nm_cmd = [
-            self.config.nonmem.nonmem_path,
-            str(mod_path),
-        ]
+        # 直接调用 nmfe76 (输出 .lst 到同一目录)
+        nmfe_path = self.config.nonmem.nonmem_path
+        lst_name = f"run{run_id}.lst"
+
+        if os.path.exists(nmfe_path):
+            # 直接 nmfe76 模式: nmfe76 run{id}.mod run{id}.lst
+            nm_cmd = [
+                nmfe_path,
+                str(mod_path.name),
+                lst_name,
+            ]
+            logger.info(f"使用 nmfe76 直接模式: {nmfe_path}")
+        else:
+            # 降级为 PsN execute
+            psn_execute = self.config.nonmem.psn_execute
+            output_dir = f"run{run_id}_psn"
+            if os.path.exists(str(self.workspace / output_dir)):
+                shutil.rmtree(str(self.workspace / output_dir))
+            nm_cmd = [
+                psn_execute,
+                str(mod_path.name),
+                f"-directory={output_dir}",
+                "-clean=1",
+            ]
+            logger.info(f"降级为 PsN execute 模式: {psn_execute}")
 
         try:
             result = subprocess.run(
@@ -67,6 +87,35 @@ class NonmemRunner:
 
             # 检查LST文件是否生成
             lst_path = self.workspace / f"run{run_id}.lst"
+
+            # PsN execute 模式: LST在子目录中，复制到工作区
+            if not lst_path.exists() and 'psn_dir' in dir():
+                psn_dir = self.workspace / output_dir
+                psn_lst = None
+                # 搜索 PsN 输出目录中的 .lst 文件
+                if psn_dir.exists():
+                    for f in psn_dir.glob("*.lst"):
+                        psn_lst = f
+                        break
+                    # 也可能在不同子目录
+                    if not psn_lst:
+                        for f in psn_dir.rglob("*.lst"):
+                            psn_lst = f
+                            break
+
+                if psn_lst and psn_lst.exists():
+                    shutil.copy2(str(psn_lst), str(lst_path))
+                    # 同时复制其他关键输出文件
+                    for ext in [".ext", ".cov", ".cor", ".phi"]:
+                        src = psn_lst.with_suffix(ext)
+                        if src.exists():
+                            shutil.copy2(str(src), str(self.workspace / f"run{run_id}{ext}"))
+                    # 复制 SDTAB 等表文件
+                    for tab_file in psn_dir.rglob("SDTAB*"):
+                        shutil.copy2(str(tab_file), str(self.workspace / tab_file.name.upper()))
+                    for tab_file in psn_dir.rglob("sdtab*"):
+                        shutil.copy2(str(tab_file), str(self.workspace / tab_file.name.upper()))
+
             if lst_path.exists():
                 logger.info(f"NONMEM Run {run_id} 完成, LST文件已生成")
                 return True, output

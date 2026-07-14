@@ -364,7 +364,10 @@ def render_model(
         initial = param.get("initial", 0)
         upper = param.get("upper")
         comment = param.get("comment", "")
-        if upper is not None:
+        # 初始值为0时必须FIX (NONMEM不允许非FIX的0初始值)
+        if initial == 0 or initial == 0.0:
+            lines.append(f"(0) FIX ; {comment}")
+        elif upper is not None:
             lines.append(f"({lower}, {initial}, {upper}) ; {comment}")
         else:
             lines.append(f"({lower}, {initial}) ; {comment}")
