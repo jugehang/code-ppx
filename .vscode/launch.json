@@ -1,0 +1,24 @@
+{
+    "configurations": [
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:AutoPMX_Test}/AutoPMXMac",
+            "name": "Debug AutoPMX (AutoPMXMac)",
+            "target": "AutoPMX",
+            "configuration": "debug",
+            "preLaunchTask": "swift: Build Debug AutoPMX (AutoPMXMac)"
+        },
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:AutoPMX_Test}/AutoPMXMac",
+            "name": "Release AutoPMX (AutoPMXMac)",
+            "target": "AutoPMX",
+            "configuration": "release",
+            "preLaunchTask": "swift: Build Release AutoPMX (AutoPMXMac)"
+        }
+    ]
+}
