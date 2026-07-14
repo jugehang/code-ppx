@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "poppk-nonmem": {
+      "type": "stdio",
+      "command": "python3",
+      "args": ["-m", "PopPK_Agent.mcp_server"],
+      "env": {
+        "POPPK_WORKSPACE": "/Users/grahamju/Desktop/CodePPK/PopPK_Agent",
+        "PYTHONPATH": "/Users/grahamju/Desktop/CodePPK"
+      },
+      "description": "PopPK NONMEM工具 - 运行NONMEM、解析LST、生成诊断图、AI审计"
+    }
+  }
+}

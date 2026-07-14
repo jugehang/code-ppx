@@ -1,0 +1,38 @@
+# PopPK Agent 建模规范
+
+## NONMEM 控制流编写规范
+
+- 每个记录以 `$` 开头，注释用 `;` 表示
+- `$INPUT` 必须使用标准列名: ID, TIME, DV, AMT, RATE, EVID, MDV, CMT
+- `$THETA` 格式: `(Lower, Initial, Upper)` 或 `(Lower, Initial)`
+- `$EST` 推荐 `METHOD=1 INTER MAXEVAL=9999 NOABORT SIG=3 PRINT=10`
+- `$TABLE` 必须包含 PRED, IPRED, CWRES, CIWRES 用于GOF诊断
+- 每个模型包含 `$COV` 步骤
+- SDTAB 文件命名: `SDTAB{run_id}`
+
+## 单抗(mAb) PK参数范围
+
+- 非特异性清除率 CL: 90-560 mL/day (0.004-0.023 L/h)
+- 中央分布容积 V1: 3-5 L
+- 外周分布容积 V2: 1.5-4 L
+- 分布清除率 Q: 0.010-0.050 L/h
+- 半衰期: 11-30天
+- IgG亚型半衰期约21天 (FcRn回收)
+
+## 模型评估阈值
+
+- RSE < 30%: 参数精度可接受
+- Eta-shrinkage < 30%: IIV可靠
+- |CWRES| < 6: 残差可接受
+- ΔOFV > 3.84 (p<0.05): 嵌套模型改进显著
+- ΔOFV > 6.63 (p<0.01): 高度显著
+- Bootstrap成功率 > 90%: 模型稳定
+- VPC: 观测分位数线应在模拟PI内
+
+## 代码规范
+
+- Python 代码使用 type hints
+- 配置通过 `core/config.py` 统一管理
+- LLM后端通过 `core/llm_backend.py` 抽象
+- 规则库路径: `PopPK_Agent/poppk_rules.json`
+- R脚本通过 `Rscript` 命令调用
