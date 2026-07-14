@@ -4,11 +4,12 @@ __pycache__/
 *$py.class
 *.so
 .Python
+*.egg-info/
+.eggs/
 venv/
 env/
 ENV/
 .venv/
-*.egg-info/
 dist/
 build/
 
@@ -48,14 +49,8 @@ boot_dir_*/
 tmp/
 temp/
 
-# Large image files (keep in Compare* directories selectively)
-# Uncomment to ignore large diagnostic images:
-# *.jpg
-# *.JPG
-# *.pdf
-# *.xlsx
-
 # API keys and secrets
 .env
+*.env
 secrets.json
 api_keys.json

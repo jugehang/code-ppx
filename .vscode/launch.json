@@ -1,0 +1,18 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Run CodePPK Extension",
+      "type": "extensionHost",
+      "request": "launch",
+      "args": [
+        "--extensionDevelopmentPath=${workspaceFolder}/CodePPK/vscode-extension",
+        "${workspaceFolder}/PopPK_Agent"
+      ],
+      "outFiles": [
+        "${workspaceFolder}/CodePPK/vscode-extension/out/**/*.js"
+      ],
+      "preLaunchTask": "npm: compile"
+    }
+  ]
+}
