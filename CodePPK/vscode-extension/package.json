@@ -1,0 +1,217 @@
+{
+  "name": "codeppk",
+  "displayName": "CodePPK - Automated PopPK Modeling",
+  "description": "LLM-powered automated population pharmacokinetic modeling platform for NONMEM",
+  "version": "0.1.0",
+  "publisher": "codeppk",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": ["Other", "Machine Learning", "Data Science"],
+  "activationEvents": ["onView:codeppk.explorer", "onCommand:codeppk.run"],
+  "main": "./out/extension.js",
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "codeppk",
+          "title": "CodePPK",
+          "icon": "media/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "codeppk": [
+        {
+          "id": "codeppk.explorer",
+          "name": "Models & Outputs"
+        },
+        {
+          "id": "codeppk.runs",
+          "name": "Modeling Loop"
+        },
+        {
+          "id": "codeppk.config",
+          "name": "LLM Configuration"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "codeppk.run",
+        "title": "CodePPK: Run Automated Modeling Loop",
+        "icon": "$(play)"
+      },
+      {
+        "command": "codeppk.runNonmem",
+        "title": "CodePPK: Run NONMEM (Current Model)"
+      },
+      {
+        "command": "codeppk.runGOF",
+        "title": "CodePPK: Generate GOF Plots"
+      },
+      {
+        "command": "codeppk.runVPC",
+        "title": "CodePPK: Generate VPC Plots"
+      },
+      {
+        "command": "codeppk.auditLST",
+        "title": "CodePPK: Audit LST Parameters"
+      },
+      {
+        "command": "codeppk.auditGOF",
+        "title": "CodePPK: AI Audit GOF Plot"
+      },
+      {
+        "command": "codeppk.auditVPC",
+        "title": "CodePPK: AI Audit VPC Plot"
+      },
+      {
+        "command": "codeppk.analyzeData",
+        "title": "CodePPK: Analyze Dataset Features"
+      },
+      {
+        "command": "codeppk.generateModel",
+        "title": "CodePPK: Generate Model from Template"
+      },
+      {
+        "command": "codeppk.validateModel",
+        "title": "CodePPK: Validate .mod File"
+      },
+      {
+        "command": "codeppk.openGOFImage",
+        "title": "CodePPK: Open GOF Image",
+        "icon": "$(image)"
+      },
+      {
+        "command": "codeppk.openVPCImage",
+        "title": "CodePPK: Open VPC Image",
+        "icon": "$(image)"
+      },
+      {
+        "command": "codeppk.openAuditReport",
+        "title": "CodePPK: Open Audit Report",
+        "icon": "$(book)"
+      },
+      {
+        "command": "codeppk.refreshExplorer",
+        "title": "CodePPK: Refresh Explorer",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "codeppk.configureLLM",
+        "title": "CodePPK: Configure LLM Provider"
+      },
+      {
+        "command": "codeppk.stopLoop",
+        "title": "CodePPK: Stop Modeling Loop",
+        "icon": "$(debug-stop)"
+      }
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "codeppk.run",
+          "when": "view == codeppk.runs",
+          "group": "navigation"
+        },
+        {
+          "command": "codeppk.stopLoop",
+          "when": "view == codeppk.runs && codeppk.loopRunning",
+          "group": "navigation"
+        },
+        {
+          "command": "codeppk.refreshExplorer",
+          "when": "view == codeppk.explorer",
+          "group": "navigation"
+        }
+      ],
+      "editor/title": [
+        {
+          "command": "codeppk.openGOFImage",
+          "when": "resourceFilename =~ /GOF_mod/",
+          "group": "navigation"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "CodePPK",
+      "properties": {
+        "codeppk.llmProvider": {
+          "type": "string",
+          "enum": ["local", "api", "plugin"],
+          "default": "local",
+          "description": "LLM provider type: local (LM Studio/Ollama), api (OpenAI/Anthropic), or plugin (VS Code Claude Code/Codex)"
+        },
+        "codeppk.llmModel": {
+          "type": "string",
+          "default": "google/gemma-4-26b-a4b",
+          "description": "LLM model ID"
+        },
+        "codeppk.llmBaseUrl": {
+          "type": "string",
+          "default": "http://localhost:1234/v1",
+          "description": "LLM API base URL (for local or custom API endpoints)"
+        },
+        "codeppk.llmApiKey": {
+          "type": "string",
+          "default": "lm-studio",
+          "description": "API key for LLM provider"
+        },
+        "codeppk.visionModel": {
+          "type": "string",
+          "default": "",
+          "description": "Vision model ID for GOF/VPC image audit (empty = use llmModel)"
+        },
+        "codeppk.pluginCommand": {
+          "type": "string",
+          "default": "",
+          "description": "VS Code plugin command (e.g. 'claude' or 'codex')"
+        },
+        "codeppk.maxIterations": {
+          "type": "number",
+          "default": 10,
+          "description": "Maximum modeling loop iterations"
+        },
+        "codeppk.dataFile": {
+          "type": "string",
+          "default": "NM_dat_new.csv",
+          "description": "Default data file name"
+        },
+        "codeppk.rulesFile": {
+          "type": "string",
+          "default": "poppk_rules.json",
+          "description": "Rules file name (comma-separated for multiple)"
+        },
+        "codeppk.pythonPath": {
+          "type": "string",
+          "default": "python3",
+          "description": "Python executable path for running CodePPK backend"
+        }
+      }
+    },
+    "keybindings": [
+      {
+        "command": "codeppk.run",
+        "key": "ctrl+shift+r",
+        "mac": "cmd+shift+r"
+      },
+      {
+        "command": "codeppk.auditLST",
+        "key": "ctrl+shift+a",
+        "mac": "cmd+shift+a"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "package": "vsce package"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.85.0",
+    "@types/node": "^20.0.0",
+    "typescript": "^5.3.0"
+  }
+}
